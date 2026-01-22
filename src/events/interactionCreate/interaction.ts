@@ -5,7 +5,7 @@ export default async (interaction: BaseInteraction) => {
   try {
     if (interaction.isChatInputCommand()) {
       const command = interaction.client.commands.find(
-        (c) => c.name === interaction.commandName
+        (c) => c.name === interaction.commandName,
       );
 
       if (!command?.execute) throw new Error("Command is not setup yet!");
@@ -13,6 +13,7 @@ export default async (interaction: BaseInteraction) => {
       if (command.guildOnly && !interaction.inGuild())
         throw new Error("Command must be ran inside server only!");
 
+      if (interaction.guildId !== process.env.GUILD_ID) return;
       // Check for permissions if set any
       if (command.permissionRequired && interaction.inCachedGuild()) {
         // If only specified single perm
@@ -24,7 +25,7 @@ export default async (interaction: BaseInteraction) => {
         // If specified array of perms
         if (Array.isArray(command.permissionRequired)) {
           const hasPerm = command.permissionRequired.some((p) =>
-            interaction.member.permissions.has(p)
+            interaction.member.permissions.has(p),
           );
 
           if (!hasPerm)
@@ -37,7 +38,7 @@ export default async (interaction: BaseInteraction) => {
 
     if (interaction.isAutocomplete()) {
       const command = interaction.client.commands.find(
-        (c) => c.name === interaction.commandName
+        (c) => c.name === interaction.commandName,
       );
 
       if (!command?.autocomplete) return;
@@ -47,7 +48,9 @@ export default async (interaction: BaseInteraction) => {
       response = response.slice(0, 25);
 
       await interaction.respond(
-        response.map((r) => (typeof r === "string" ? { name: r, value: r } : r))
+        response.map((r) =>
+          typeof r === "string" ? { name: r, value: r } : r,
+        ),
       );
     }
   } catch (error) {
