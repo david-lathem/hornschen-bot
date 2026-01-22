@@ -33,6 +33,8 @@ export default async (interaction: BaseInteraction) => {
       claimedByUserId: interaction.user.id,
     });
 
+    await channel.send(`${interaction.user}`);
+
     await channel.permissionOverwrites.edit(interaction.user.id, {
       ViewChannel: true,
       SendMessages: true,
