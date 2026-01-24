@@ -16,8 +16,8 @@ export default {
 
     const formatted = channels
       .map((c, i) => {
-        const preview = c.messageText.split(" ").slice(0, 10).join(" ");
-        return `\`${i + 1}.\` <#${c.channelId}> — ${preview}${c.messageText.split(" ").length > 10 ? "..." : ""}`;
+        const preview = c.messageText?.split(" ").slice(0, 10).join(" ");
+        return `\`${i + 1}.\` <#${c.channelId}> — ${preview || "Not set"}${c.messageText?.split(" ").length || 0 > 10 ? "..." : ""}`;
       })
       .join("\n\n");
 

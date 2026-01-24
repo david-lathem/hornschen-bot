@@ -23,17 +23,17 @@ export default {
         "This channel is not registered in the ticket system or no claimer found for the channel",
       );
 
+    await channel.permissionOverwrites.edit(config.claimedByUserId, {
+      ViewChannel: false,
+      SendMessages: false,
+    });
+
     let fetchedMessages = await channel.messages.fetch({ limit: 100 });
 
     while (fetchedMessages.size > 0) {
       await channel.bulkDelete(fetchedMessages, true);
       fetchedMessages = await channel.messages.fetch({ limit: 100 });
     }
-
-    await channel.permissionOverwrites.edit(config.claimedByUserId, {
-      ViewChannel: false,
-      SendMessages: false,
-    });
 
     // await interaction.editReply(
     //   "Ticket finished: messages cleared and claim released.",

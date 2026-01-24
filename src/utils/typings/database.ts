@@ -1,7 +1,7 @@
 export type ChannelConfig = {
   channelId: string;
-  messageText: string;
-  videoExt: string;
+  messageText?: string | null;
+  videoExt?: string | null;
   claimedByUserId?: string | null;
 };
 

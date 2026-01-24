@@ -23,13 +23,13 @@ export default {
       name: "message",
       type: 3,
       description: "Message text",
-      required: true,
+      required: false,
     },
     {
       name: "video",
       type: ApplicationCommandOptionType.Attachment,
       description: "Video URL to download",
-      required: true,
+      required: false,
     },
   ],
   execute: async (interaction) => {
@@ -39,18 +39,27 @@ export default {
       "channel",
       true,
     ) as TextChannel;
-    const messageText = interaction.options.getString("message", true);
-    const video = interaction.options.getAttachment("video", true);
+    const messageText = interaction.options.getString("message");
+    const video = interaction.options.getAttachment("video");
 
     const { id: channelId } = channel;
 
     console.log(video);
 
-    const { ext, filePath } = await downloadVideo(
-      video.url,
-      channelId,
-      video.contentType,
-    );
+    let ext = null;
+
+    let filePath = null;
+
+    if (video) {
+      const result = await downloadVideo(
+        video.url,
+        channelId,
+        video.contentType,
+      );
+
+      ext = result.ext;
+      filePath = result.filePath;
+    }
 
     upsertChannelConfig.run({
       channelId,
@@ -60,9 +69,10 @@ export default {
 
     setClaimedByUser.run({ channelId, claimedByUserId: null });
 
-    await channel.send(messageText);
+    if (messageText) await channel.send(messageText);
 
-    await channel.send({ files: [new AttachmentBuilder(filePath)] });
+    if (filePath)
+      await channel.send({ files: [new AttachmentBuilder(filePath)] });
 
     await interaction.editReply(`Success!`);
   },
