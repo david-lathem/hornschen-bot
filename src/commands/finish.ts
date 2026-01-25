@@ -1,5 +1,9 @@
 import { PermissionFlagsBits, TextChannel } from "discord.js";
-import { getChannelConfig, setClaimedByUser } from "../database/queries.js";
+import {
+  deleteChannelConfig,
+  getChannelConfig,
+  setClaimedByUser,
+} from "../database/queries.js";
 import { extendedAPICommand } from "../utils/typings/types.js";
 
 export default {
@@ -23,6 +27,7 @@ export default {
         "This channel is not registered in the ticket system or no claimer found for the channel",
       );
 
+    deleteChannelConfig.run({ channelId: channel.id });
     await channel.permissionOverwrites.edit(config.claimedByUserId, {
       ViewChannel: false,
       SendMessages: false,
