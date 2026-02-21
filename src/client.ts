@@ -10,4 +10,9 @@ await registerEventsOnClient(client);
 
 client.login(process.env.TOKEN);
 
+client.rest.on('rateLimited', (rateLimitInfo) => {
+  console.log('Rate limit hit!');
+console.log(rateLimitInfo)
+});
+
 export default client;
