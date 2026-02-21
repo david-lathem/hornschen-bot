@@ -33,12 +33,18 @@ export default {
       SendMessages: false,
     });
 
-    let fetchedMessages = await channel.messages.fetch({ limit: 100 });
 
+
+    let fetchedMessages = await channel.messages.fetch({ limit: 100 });
+    console.log(fetchedMessages.size)
     while (fetchedMessages.size > 0) {
+      
       await channel.bulkDelete(fetchedMessages, true);
       fetchedMessages = await channel.messages.fetch({ limit: 100 });
+      console.log(`Fetched ${fetchedMessages.size} again}`)
     }
+
+    console.log('finish')
 
     // await interaction.editReply(
     //   "Ticket finished: messages cleared and claim released.",
