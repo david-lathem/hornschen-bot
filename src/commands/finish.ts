@@ -41,7 +41,7 @@ while (fetchedMessages.size > 0) {
     try {
       await message.delete();
     } catch (err) {
-      console.log(`Failed to delete message ${message.id}`, err.message);
+      console.log(err);
     }
   }
 
