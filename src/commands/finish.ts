@@ -34,6 +34,7 @@ export default {
     });
 
 
+    console.log(`Fetching...`)
 
     let fetchedMessages = await channel.messages.fetch({ limit: 100 });
     console.log(fetchedMessages.size)
