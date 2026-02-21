@@ -34,18 +34,19 @@ export default {
     });
 
 
-    console.log(`Fetching...`)
+let fetchedMessages = await channel.messages.fetch({ limit: 100 });
 
-    let fetchedMessages = await channel.messages.fetch({ limit: 100 });
-    console.log(fetchedMessages.size)
-    while (fetchedMessages.size > 0) {
-      
-      await channel.bulkDelete(fetchedMessages, true);
-      fetchedMessages = await channel.messages.fetch({ limit: 100 });
-      console.log(`Fetched ${fetchedMessages.size} again}`)
+while (fetchedMessages.size > 0) {
+  for (const message of fetchedMessages.values()) {
+    try {
+      await message.delete();
+    } catch (err) {
+      console.log(`Failed to delete message ${message.id}`, err.message);
     }
+  }
 
-    console.log('finish')
+  fetchedMessages = await channel.messages.fetch({ limit: 100 });
+}
 
     // await interaction.editReply(
     //   "Ticket finished: messages cleared and claim released.",
